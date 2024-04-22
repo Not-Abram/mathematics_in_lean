@@ -66,7 +66,7 @@ theorem add_right_cancel {a b c : R} (h : a + b = c + b) : a = c := by
 theorem mul_zero (a : R) : a * 0 = 0 := by
   have h : a * 0 + a * 0 = a * 0 + 0 := by
     rw [← mul_add, add_zero, add_zero]
-  rw [add_left_cancel h]
+  exact add_left_cancel h
 
 theorem zero_mul (a : R) : 0 * a = 0 := by
   have h : 0 * a + 0 * a = 0 * a + 0 := by
@@ -112,13 +112,13 @@ namespace MyRing
 variable {R : Type*} [Ring R]
 
 theorem self_sub (a : R) : a - a = 0 := by
-  sorry
+  rw [sub_eq_add_neg, add_right_neg]
 
 theorem one_add_one_eq_two : 1 + 1 = (2 : R) := by
   norm_num
 
 theorem two_mul (a : R) : 2 * a = a + a := by
-  sorry
+  rw [← one_add_one_eq_two, add_mul, one_mul]
 
 end MyRing
 
@@ -141,6 +141,8 @@ variable {G : Type*} [Group G]
 namespace MyGroup
 
 theorem mul_right_inv (a : G) : a * a⁻¹ = 1 := by
+  have h : a⁻¹ * a * a⁻¹ = a⁻¹ := by
+    rw [mul_left_inv, one_mul]
   sorry
 
 theorem mul_one (a : G) : a * 1 = a := by
