@@ -39,17 +39,42 @@ example : min a b = min b a := by
     apply min_le_left
 
 example : max a b = max b a := by
-  sorry
+  apply le_antisymm
+  · apply max_le
+    · apply le_max_right
+    · apply le_max_left
+  · apply max_le
+    · apply le_max_right
+    · apply le_max_left
+
 example : min (min a b) c = min a (min b c) := by
-  sorry
+  apply le_antisymm
+  · apply le_min
+    · apply min_le_of_left_le ?_
+      · exact min_le_left a b
+    · apply min_le_min_right c ?_
+      · exact min_le_right a b
+  · apply min_le_of_left_le ?_
+    · apply le_min
+      · sorry
+      · sorry
+
 theorem aux : min a b + c ≤ min (a + c) (b + c) := by
   sorry
+
 example : min a b + c = min (a + c) (b + c) := by
-  sorry
+  apply le_antisymm
+  · exact aux a b c
+  · sorry
+  -- provided tactics: add_neg_cancel_right, linarith
+
 #check (abs_add : ∀ a b : ℝ, |a + b| ≤ |a| + |b|)
 
-example : |a| - |b| ≤ |a - b| :=
+example : |a| - |b| ≤ |a - b| := by
   sorry
+  -- provided tactics: sub_add_cancel
+  -- this is the exact proof but I can't figure out how to break it down:
+  --exact abs_sub_abs_le_abs_sub a b
 end
 
 section
@@ -60,12 +85,13 @@ example (h₀ : x ∣ y) (h₁ : y ∣ z) : x ∣ z :=
 
 example : x ∣ y * x * z := by
   apply dvd_mul_of_dvd_left
-  apply dvd_mul_left
+  exact dvd_mul_left x y
 
 example : x ∣ x ^ 2 := by
   apply dvd_mul_left
 
 example (h : x ∣ w) : x ∣ y * (x * z) + x ^ 2 + w ^ 2 := by
+  rw [← mul_assoc, mul_comm y x, pow_two, pow_two, add_comm, mul_assoc, ← mul_add]
   sorry
 end
 
@@ -80,5 +106,3 @@ variable (m n : ℕ)
 example : Nat.gcd m n = Nat.gcd n m := by
   sorry
 end
-
-

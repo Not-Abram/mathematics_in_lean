@@ -36,22 +36,60 @@ variable (x y z : α)
 #check (sup_le : x ≤ z → y ≤ z → x ⊔ y ≤ z)
 
 example : x ⊓ y = y ⊓ x := by
-  sorry
+  apply le_antisymm
+  repeat
+    apply le_inf
+    apply inf_le_right
+    apply inf_le_left
 
 example : x ⊓ y ⊓ z = x ⊓ (y ⊓ z) := by
-  sorry
+  apply le_antisymm
+  · apply inf_le_of_right_le
+    · apply le_inf
+      · apply?
+      · sorry
+  · apply inf_le_of_right_le
+    · sorry
 
 example : x ⊔ y = y ⊔ x := by
-  sorry
+  apply le_antisymm
+  · apply sup_le
+    · apply le_sup_right
+    · apply le_sup_left
+  · apply sup_le
+    · apply le_sup_right
+    · apply le_sup_left
 
 example : x ⊔ y ⊔ z = x ⊔ (y ⊔ z) := by
-  sorry
+  apply le_antisymm
+  · apply sup_le
+    · apply sup_le_sup_left
+      · apply le_sup_left
+    · apply le_sup_of_le_right
+      · apply le_sup_right
+  · apply sup_le
+    · apply le_sup_of_le_left
+      · apply le_sup_left
+    · apply sup_le_sup_right
+      · apply le_sup_right
 
 theorem absorb1 : x ⊓ (x ⊔ y) = x := by
-  sorry
+  apply le_antisymm
+  · exact inf_le_left
+  · apply le_inf
+    · exact Eq.le rfl
+    · apply le_sup_left
+  -- short answer:
+  --exact inf_sup_self
 
 theorem absorb2 : x ⊔ x ⊓ y = x := by
-  sorry
+  apply le_antisymm
+  · apply sup_le
+    · exact Eq.le rfl
+    · apply inf_le_left
+  · apply le_sup_left
+  -- short answer:
+  --exact sup_inf_self
 
 end
 
@@ -87,13 +125,16 @@ variable (a b c : R)
 #check (mul_nonneg : 0 ≤ a → 0 ≤ b → 0 ≤ a * b)
 
 example (h : a ≤ b) : 0 ≤ b - a := by
-  sorry
+  exact sub_nonneg.mpr h
+  -- need to find the actual answers
 
 example (h: 0 ≤ b - a) : a ≤ b := by
-  sorry
+  exact sub_nonneg.mp h
+  -- also need to find the actual answers
 
 example (h : a ≤ b) (h' : 0 ≤ c) : a * c ≤ b * c := by
-  sorry
+  exact mul_le_mul_of_nonneg_right h h'
+  -- still need to find the actual answers
 
 end
 
@@ -109,4 +150,3 @@ example (x y : X) : 0 ≤ dist x y := by
   sorry
 
 end
-
